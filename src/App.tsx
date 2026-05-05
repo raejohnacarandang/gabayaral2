@@ -428,6 +428,7 @@ return (
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [role, setRole] = useState<Role>('parent');
   const [activeTeacherTab, setActiveTeacherTab] = useState('dashboard');
   const [grades, setGrades] = useState<GradeEntry[]>(MOCK_GRADES);
@@ -582,6 +583,17 @@ const handleAddGrade = (newGrade: GradeEntry) => {
   const [successModal, setSuccessModal] = useState<{ show: boolean, message: string }>({ show: false, message: '' });
   const [showAddStudent, setShowAddStudent] = useState(false);
   const [newStudentName, setNewStudentName] = useState('');
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+
+  // Auto-close login success modal
+  React.useEffect(() => {
+    if (showLoginSuccess) {
+      const timer = setTimeout(() => {
+        setShowLoginSuccess(false);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [showLoginSuccess]);
 
   const handleAddStudent = () => {
     if (!newStudentName.trim()) return;
@@ -676,7 +688,10 @@ if (!isAuthenticated) {
                 </div>
 
                 <button 
-                  onClick={() => setIsAuthenticated(true)}
+                  onClick={() => {
+                    setIsAuthenticated(true);
+                    setShowLoginSuccess(true);
+                  }}
                   className="w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all"
                 >
                   Sign In
@@ -743,6 +758,16 @@ if (!isAuthenticated) {
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4">
+            <button 
+              onClick={() => {
+                setIsAuthenticated(false);
+                setShowLoginSuccess(false);
+              }}
+              className="text-xs font-medium text-slate-500 hover:text-slate-700 flex items-center gap-1"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              Logout
+            </button>
             <div className="relative">
               <Bell className="w-4 h-4 text-slate-500" />
               {alerts.some(a => !a.isRead) && (
@@ -1279,6 +1304,36 @@ if (!isAuthenticated) {
         message={successModal.message} 
         onClose={() => setSuccessModal({ show: false, message: '' })} 
       />
+
+      {/* Login Success Modal */}
+      <AnimatePresence>
+        {showLoginSuccess && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs text-center"
+            >
+              <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-1">Login Successful!</h3>
+              <p className="text-sm text-slate-500 mb-4">Welcome back, {role === 'teacher' ? 'Prof. Cruz' : 'Elena Santos'}</p>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-xs text-emerald-600 font-medium">Redirecting to dashboard...</span>
+              </div>
+              <div className="text-xs text-slate-400">Please wait...</div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Add Student Modal */}
       <AnimatePresence>
