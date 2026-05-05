@@ -333,6 +333,64 @@ export default function App() {
     return { totalAvg, growth };
   }, [studentAverages]);
 
+  // AI Learning Analysis Generator
+  const aiAnalysis = useMemo(() => {
+    const subAverages = studentAverages;
+    if (subAverages.length === 0) return null;
+
+    // Find strongest and weakest subjects
+    const sorted = [...subAverages].sort((a, b) => b.average - a.average);
+    const strongest = sorted[0];
+    const weakest = sorted[sorted.length - 1];
+    const overallAvg = Math.round(subAverages.reduce((a, b) => a + b.average, 0) / subAverages.length);
+
+    // Count recent grades (last 7 days)
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const recentGrades = studentGrades.filter(g => new Date(g.date) >= weekAgo);
+    const recentCount = recentGrades.length;
+
+    // Determine trend (compare last 2 grades)
+    let trend = 'stable';
+    if (studentGrades.length >= 2) {
+      const last2 = studentGrades.slice(-2);
+      const older = last2[0].score / last2[0].maxScore;
+      const newer = last2[1].score / last2[1].maxScore;
+      if (newer > older + 0.05) trend = 'improving';
+      else if (newer < older - 0.05) trend = 'declining';
+    }
+
+    // Generate dynamic message
+    let message = '';
+    if (overallAvg >= 90) {
+      message = `is consistently excelling across all subjects! Outstanding performance in ${strongest.name} with ${strongest.average}%.`;
+    } else if (overallAvg >= 80) {
+      message = `is showing strong performance in ${strongest.name} at ${strongest.average}%. ${weakest.name} needs attention at ${weakest.average}%.`;
+    } else if (overallAvg >= 75) {
+      message = `is maintaining steady progress. Focus on ${weakest.name} to improve overall performance.`;
+    } else {
+      message = `needs additional support. Consider reviewing ${weakest.name} fundamentals.`;
+    }
+
+    // Determine next milestone
+    const nextMilestone = 'Exam Week'; // Could be dynamic based on date
+
+    return {
+      overallAvg,
+      strongest: strongest.name,
+      strongestAvg: strongest.average,
+      weakest: weakest.name,
+      weakestAvg: weakest.average,
+      recentActivity: recentCount,
+      nextMilestone,
+      trend,
+      message,
+      retention: overallAvg,
+      participation: recentCount >= 3 ? 'High' : recentCount >= 1 ? 'Moderate' : 'Low',
+      focusScore: `${Math.min(10, Math.max(5, Math.round(overallAvg / 10 * 1.2 * 10) / 10)}/10`
+    };
+  }, [studentGrades, studentAverages]);
+
 const handleAddGrade = (newGrade: GradeEntry) => {
     // Intelligent Risk Detection (Light AI Logic) - check BEFORE adding
     const prevGrades = grades.filter(g => g.studentId === newGrade.studentId && g.subjectId === newGrade.subjectId);
@@ -560,15 +618,19 @@ return (
                       <span className="text-xs font-medium text-emerald-400">AI Learning Analysis</span>
                     </div>
                     <h2 className="text-xl font-bold mb-2">Good morning, Elena.</h2>
-                    <p className="text-sm text-slate-400 mb-4">
-                      Based on this week's progress, <span className="text-white font-semibold">{currentUserStudent.name.split(' ')[0]}</span> is demonstrating <span className="text-emerald-400 font-semibold">strong conceptual focus</span> in Performance Tasks. Ask about the "Solar Project" today.
-                    </p>
+                    {aiAnalysis && (
+                      <p className="text-sm text-slate-400 mb-4">
+                        Based on this week's progress, <span className="text-white font-semibold">{currentUserStudent.name.split(' ')[0]}</span> {aiAnalysis.message}
+                        {aiAnalysis.trend === 'improving' && ' Recent scores show improvement!'}
+                        {aiAnalysis.trend === 'declining' && ' Recent scores need attention.'}
+                      </p>
+                    )}
                     <div className="grid grid-cols-4 gap-3">
-                      {[
-                        { label: 'Retention', value: '94%', color: 'text-emerald-400' },
-                        { label: 'Participation', value: 'High', color: 'text-blue-400' },
-                        { label: 'Focus', value: '8.8/10', color: 'text-indigo-400' },
-                        { label: 'Next', value: 'Exam Week', color: 'text-slate-100' }
+                      {aiAnalysis && [
+                        { label: 'Retention', value: `${aiAnalysis.retention}%`, color: aiAnalysis.retention >= 80 ? 'text-emerald-400' : 'text-amber-400' },
+                        { label: 'Activity', value: `${aiAnalysis.recentActivity} grades`, color: 'text-blue-400' },
+                        { label: 'Trend', value: aiAnalysis.trend === 'improving' ? '↑' : aiAnalysis.trend === 'declining' ? '↓' : '→', color: aiAnalysis.trend === 'improving' ? 'text-emerald-400' : aiAnalysis.trend === 'declining' ? 'text-rose-400' : 'text-slate-400' },
+                        { label: 'Next', value: aiAnalysis.nextMilestone, color: 'text-slate-100' }
                       ].map((item, i) => (
                         <div key={i} className="bg-white/5 p-3 rounded-lg">
                           <p className="text-[10px] text-slate-500 mb-1">{item.label}</p>
