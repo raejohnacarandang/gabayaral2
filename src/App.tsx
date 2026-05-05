@@ -11,7 +11,7 @@ import {
   Users, BookOpen, Bell, TrendingUp, TrendingDown, Plus, ChevronRight, 
   MessageSquare, User, Filter, AlertCircle, CheckCircle2, Info, Loader2,
   Calendar, Award, Target, LayoutDashboard, LogOut, Settings, MoreVertical,
-  Sparkles, BrainCircuit
+  Sparkles, BrainCircuit, Upload
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -173,10 +173,30 @@ const GradeEncoder = ({ students, subjects, selectedStudentId, grades, onAddGrad
 
 return (
     <div className="space-y-4">
+      {/* CSV Upload Button */}
+      <div className="bg-white p-3 rounded-xl border border-slate-200">
+        <label className="flex items-center justify-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-lg border-2 border-dashed border-slate-300 transition-all">
+          <Upload className="w-4 h-4 text-slate-500" />
+          <span className="text-sm font-medium text-slate-600">Upload CSV / Excel</span>
+          <input 
+            type="file" 
+            accept=".csv,.xlsx,.xls"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                alert(`Demo: ${file.name} uploaded! In production, this would process grades from Excel/CSV.`);
+              }
+            }}
+          />
+        </label>
+        <p className="text-xs text-slate-400 text-center mt-2">Upload grades in bulk via Excel/CSV</p>
+      </div>
+
       <div className="bg-white p-4 rounded-xl border border-slate-200">
         <h3 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
           <Plus className="w-4 h-4" />
-          Performance Record
+          Single Record
         </h3>
         <div className="space-y-3">
           <div>
