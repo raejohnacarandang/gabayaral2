@@ -517,7 +517,7 @@ if (!isAuthenticated) {
     return (
       <div className="h-screen bg-slate-900 flex font-sans overflow-hidden">
         {/* Left Side - Login Form */}
-        <div className="w-full lg:w-1/2 flex justify-center p-6">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 h-screen">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
