@@ -504,32 +504,43 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
 if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 font-sans">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+        </div>
+
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md relative"
         >
           {/* Logo Section */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-900 rounded-2xl shadow-xl mb-4">
-              <BookOpen className="text-white w-8 h-8" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-lg shadow-emerald-500/30 mb-4">
+              <BookOpen className="text-white w-10 h-10" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900">GabayAral</h1>
-            <p className="text-slate-500 mt-1">Academic Monitoring Portal</p>
+            <h1 className="text-4xl font-bold text-white">GabayAral</h1>
+            <p className="text-slate-400 mt-2">Academic Monitoring Portal</p>
+            <div className="mt-3 inline-block px-4 py-1.5 bg-white/5 rounded-full">
+              <p className="text-sm text-emerald-400 font-medium">Bridging Home & School</p>
+              <p className="text-xs text-emerald-400/70">Pagbubuklod ng Bahay at Paaralan</p>
+            </div>
           </div>
 
           {/* Login Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Card Header */}
+            <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-4">
+              <h2 className="text-lg font-semibold text-white">Mag-Sign In</h2>
+              <p className="text-slate-400 text-sm">I-access ang iyong dashboard</p>
+            </div>
+          
             <div className="p-6 sm:p-8">
-              <div className="text-center mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">Welcome Back</h2>
-                <p className="text-sm text-slate-500 mt-1">Sign in to access your dashboard</p>
-              </div>
-
               {/* Role Selection */}
               <div className="mb-6">
-                <p className="text-xs font-medium text-slate-500 mb-2 uppercase tracking-wide">Select Role</p>
+                <p className="text-xs font-medium text-slate-500 mb-3 uppercase tracking-wide">Pumili ng Role</p>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setRole('teacher')}
@@ -539,7 +550,7 @@ if (!isAuthenticated) {
                     )}
                   >
                     <Award className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Teacher</span>
+                    <span className="text-sm font-semibold">Guro</span>
                   </button>
                   <button 
                     onClick={() => setRole('parent')}
@@ -549,7 +560,7 @@ if (!isAuthenticated) {
                     )}
                   >
                     <User className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Parent</span>
+                    <span className="text-sm font-semibold">Magulang</span>
                   </button>
                 </div>
               </div>
@@ -557,7 +568,9 @@ if (!isAuthenticated) {
               {/* Form Fields */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">{role === 'teacher' ? 'Teacher ID' : 'Access Code'}</label>
+                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">
+                    {role === 'teacher' ? 'Teacher ID' : 'Access Code'}
+                  </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                       <User className="w-4 h-4 text-slate-400" />
@@ -588,23 +601,23 @@ if (!isAuthenticated) {
               {/* Submit Button */}
               <button 
                 onClick={() => setIsAuthenticated(true)}
-                className="w-full mt-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 group"
+                className="w-full mt-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
               >
-                <span>Sign In</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                <span>Mag-Sign In</span>
+                <ChevronRight className="w-4 h-4" />
               </button>
              
               {/* Footer */}
               <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-center gap-2">
                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                 <p className="text-xs text-slate-400">Powered by AI Learning Insights</p>
+                 <p className="text-xs text-slate-400">AI-Powered Learning Insights</p>
               </div>
             </div>
           </div>
 
           {/* Demo Hint */}
-          <p className="text-center text-xs text-slate-400 mt-6">
-            Demo Mode: Click any role, then sign in (no password needed)
+          <p className="text-center text-xs text-slate-500 mt-6">
+            Demo Mode: Pindutin ang role, pagkatapos ay mag-sign in
           </p>
         </motion.div>
       </div>
