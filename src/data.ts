@@ -4,6 +4,11 @@ export const MOCK_STUDENTS: Student[] = [
   { id: 's1', name: 'Alwyn Santos', parentId: 'p1', classId: 'c1' },
   { id: 's2', name: 'Bea Reyes', parentId: 'p2', classId: 'c1' },
   { id: 's3', name: 'Carlo Dizon', parentId: 'p3', classId: 'c1' },
+  { id: 's4', name: 'Diana Cruz', parentId: 'p4', classId: 'c1' },
+  { id: 's5', name: 'Erik Fernandez', parentId: 'p5', classId: 'c1' },
+  { id: 's6', name: 'Fiona Garcia', parentId: 'p6', classId: 'c1' },
+  { id: 's7', name: 'Gabriel Hernandez', parentId: 'p7', classId: 'c1' },
+  { id: 's8', name: 'Hannah Lee', parentId: 'p8', classId: 'c1' },
 ];
 
 export const MOCK_SUBJECTS: Subject[] = [

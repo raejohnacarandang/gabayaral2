@@ -86,9 +86,24 @@ const StatCard = ({ title, value, icon: Icon, colorClass }: any) => (
 
 // --- Teacher Components ---
 
-const GradeEncoder = ({ students, subjects, onAddGrade, onAddFeedback }: { students: Student[], subjects: any[], onAddGrade: any, onAddFeedback: any }) => {
-  const [selectedStudent, setSelectedStudent] = useState(students[0]?.id || '');
+const GradeEncoder = ({ students, subjects, selectedStudentId, onAddGrade, onAddFeedback }: { students: Student[], subjects: any[], selectedStudentId?: string, onAddGrade: any, onAddFeedback: any }) => {
+  const sortedStudents = useMemo(() => {
+    return [...students].sort((a, b) => {
+      const aLastName = a.name.split(' ').slice(-1)[0].toLowerCase();
+      const bLastName = b.name.split(' ').slice(-1)[0].toLowerCase();
+      return aLastName.localeCompare(bLastName);
+    });
+  }, [students]);
+  
+  const [selectedStudent, setSelectedStudent] = useState(sortedStudents[0]?.id || '');
   const [selectedSubject, setSelectedSubject] = useState(subjects[0]?.id || '');
+
+  React.useEffect(() => {
+    if (selectedStudentId) {
+      setSelectedStudent(selectedStudentId);
+    }
+  }, [selectedStudentId]);
+  
   const [score, setScore] = useState('');
   const [maxScore, setMaxScore] = useState('100');
   const [category, setCategory] = useState<'written' | 'performance' | 'exam'>('written');
@@ -123,7 +138,7 @@ return (
               value={selectedStudent}
               onChange={(e) => setSelectedStudent(e.target.value)}
             >
-              {students.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              {sortedStudents.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div>
@@ -282,6 +297,15 @@ export default function App() {
   const [alerts, setAlerts] = useState<Alert[]>(MOCK_ALERTS);
   const [acknowledgedFeedbackIds, setAcknowledgedFeedbackIds] = useState<Set<string>>(new Set());
   const [isExpandingStudents, setIsExpandingStudents] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('s1');
+
+  const sortedStudents = useMemo(() => {
+    return [...MOCK_STUDENTS].sort((a, b) => {
+      const aLastName = a.name.split(' ').slice(-1)[0].toLowerCase();
+      const bLastName = b.name.split(' ').slice(-1)[0].toLowerCase();
+      return aLastName.localeCompare(bLastName);
+    });
+  }, []);
 
   const currentUserStudent = MOCK_STUDENTS.find(s => s.id === 's1')!;
   
@@ -868,14 +892,25 @@ return (
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-50">
-                            {MOCK_STUDENTS.slice(0, isExpandingStudents ? undefined : 5).map(student => {
+                            {sortedStudents.slice(0, isExpandingStudents ? undefined : 8).map(student => {
                               const sGrades = grades.filter(g => g.studentId === student.id);
                               const avg = calculateAverage(sGrades);
+                              const isSelected = selectedStudentId === student.id;
                               return (
-                                <tr key={student.id} className="hover:bg-slate-50 transition-colors">
+                                <tr 
+                                  key={student.id} 
+                                  onClick={() => setSelectedStudentId(student.id)}
+                                  className={cn(
+                                    "hover:bg-slate-50 transition-colors cursor-pointer",
+                                    isSelected && "bg-emerald-50"
+                                  )}
+                                >
                                   <td className="px-4 py-3">
                                     <div className="flex items-center gap-2">
-                                      <div className="w-7 h-7 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs">
+                                      <div className={cn(
+                                        "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs",
+                                        isSelected ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600"
+                                      )}>
                                         {student.name.charAt(0)}
                                       </div>
                                       <span className="font-medium text-slate-900">{student.name}</span>
@@ -922,7 +957,8 @@ return (
                   <div className="space-y-4">
                     <GradeEncoder 
                       students={MOCK_STUDENTS} 
-                      subjects={MOCK_SUBJECTS} 
+                      subjects={MOCK_SUBJECTS}
+                      selectedStudentId={selectedStudentId}
                       onAddGrade={handleAddGrade}
                       onAddFeedback={handleAddFeedback}
                     />
