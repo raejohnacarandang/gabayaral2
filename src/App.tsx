@@ -533,14 +533,14 @@ if (!isAuthenticated) {
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             {/* Card Header */}
             <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-4">
-              <h2 className="text-lg font-semibold text-white">Mag-Sign In</h2>
-              <p className="text-slate-400 text-sm">I-access ang iyong dashboard</p>
+              <h2 className="text-lg font-semibold text-white">Welcome Back</h2>
+              <p className="text-slate-400 text-sm">Sign in to continue</p>
             </div>
           
             <div className="p-6 sm:p-8">
               {/* Role Selection */}
               <div className="mb-6">
-                <p className="text-xs font-medium text-slate-500 mb-3 uppercase tracking-wide">Pumili ng Role</p>
+                <p className="text-xs font-medium text-slate-500 mb-3 uppercase tracking-wide">Select Role</p>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setRole('teacher')}
@@ -550,7 +550,7 @@ if (!isAuthenticated) {
                     )}
                   >
                     <Award className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Guro</span>
+                    <span className="text-sm font-semibold">Teacher</span>
                   </button>
                   <button 
                     onClick={() => setRole('parent')}
@@ -560,7 +560,7 @@ if (!isAuthenticated) {
                     )}
                   >
                     <User className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Magulang</span>
+                    <span className="text-sm font-semibold">Parent</span>
                   </button>
                 </div>
               </div>
@@ -603,7 +603,7 @@ if (!isAuthenticated) {
                 onClick={() => setIsAuthenticated(true)}
                 className="w-full mt-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
               >
-                <span>Mag-Sign In</span>
+                <span>Sign In</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
              
@@ -617,7 +617,7 @@ if (!isAuthenticated) {
 
           {/* Demo Hint */}
           <p className="text-center text-xs text-slate-500 mt-6">
-            Demo Mode: Pindutin ang role, pagkatapos ay mag-sign in
+            Demo Mode: Click any role, then sign in (no password needed)
           </p>
         </motion.div>
       </div>
