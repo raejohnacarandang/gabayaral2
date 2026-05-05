@@ -180,17 +180,51 @@ return (
           <span className="text-sm font-medium text-slate-600">Upload CSV / Excel</span>
           <input 
             type="file" 
-            accept=".csv,.xlsx,.xls"
+            accept=".csv"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
-                alert(`Demo: ${file.name} uploaded! In production, this would process grades from Excel/CSV.`);
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  const text = event.target?.result as string;
+                  const lines = text.split('\n');
+                  let addedCount = 0;
+                  
+                  for (let i = 1; i < lines.length; i++) { // Skip header
+                    const cols = lines[i].split(',');
+                    if (cols.length >= 6) {
+                      const studentId = cols[0].trim();
+                      const subjectId = cols[1].trim();
+                      const category = cols[2].trim() as 'written' | 'performance' | 'exam';
+                      const type = cols[3].trim();
+                      const score = parseFloat(cols[4].trim());
+                      const maxScore = parseFloat(cols[5].trim());
+                      const date = cols[6]?.trim() || new Date().toISOString().split('T')[0];
+                      
+                      if (studentId && subjectId && !isNaN(score)) {
+                        onAddGrade({
+                          id: `g${Date.now()}${i}`,
+                          studentId,
+                          subjectId,
+                          category,
+                          type,
+                          score,
+                          maxScore,
+                          date
+                        });
+                        addedCount++;
+                      }
+                    }
+                  }
+                  alert(`Successfully added ${addedCount} grades from CSV!`);
+                };
+                reader.readAsText(file);
               }
             }}
           />
         </label>
-        <p className="text-xs text-slate-400 text-center mt-2">Upload grades in bulk via Excel/CSV</p>
+        <p className="text-xs text-slate-400 text-center mt-2">Format: student_id,subject_id,category,type,score,max,date</p>
       </div>
 
       <div className="bg-white p-4 rounded-xl border border-slate-200">
