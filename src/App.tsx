@@ -382,12 +382,12 @@ export default function App() {
       weakest: weakest.name,
       weakestAvg: weakest.average,
       recentActivity: recentCount,
-      nextMilestone,
+nextMilestone,
       trend,
       message,
       retention: overallAvg,
       participation: recentCount >= 3 ? 'High' : recentCount >= 1 ? 'Moderate' : 'Low',
-      focusScore: `${Math.min(10, Math.max(5, Math.round(overallAvg / 10 * 1.2 * 10) / 10)}/10`
+      focusScore: Math.min(10, Math.max(5, Math.round(overallAvg / 10)))
     };
   }, [studentGrades, studentAverages]);
 
@@ -645,7 +645,7 @@ return (
                       {aiAnalysis && [
                         { label: 'Retention', value: `${aiAnalysis.retention}%`, color: aiAnalysis.retention >= 80 ? 'text-emerald-400' : 'text-amber-400' },
                         { label: 'Activity', value: `${aiAnalysis.recentActivity} grades`, color: 'text-blue-400' },
-                        { label: 'Trend', value: aiAnalysis.trend === 'improving' ? '↑' : aiAnalysis.trend === 'declining' ? '↓' : '→', color: aiAnalysis.trend === 'improving' ? 'text-emerald-400' : aiAnalysis.trend === 'declining' ? 'text-rose-400' : 'text-slate-400' },
+                        { label: 'Focus', value: `${aiAnalysis.focusScore}/10`, color: aiAnalysis.focusScore >= 8 ? 'text-emerald-400' : 'text-amber-400' },
                         { label: 'Next', value: aiAnalysis.nextMilestone, color: 'text-slate-100' }
                       ].map((item, i) => (
                         <div key={i} className="bg-white/5 p-3 rounded-lg">
