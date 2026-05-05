@@ -515,122 +515,125 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
 if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 font-sans">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
-        </div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md relative"
-        >
-          {/* Logo Section */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-lg shadow-emerald-500/30 mb-4">
-              <BookOpen className="text-white w-10 h-10" />
-            </div>
-            <h1 className="text-4xl font-bold text-white">GabayAral</h1>
-            <p className="text-slate-400 mt-2">Academic Monitoring Portal</p>
-            <div className="mt-3 inline-block px-4 py-1.5 bg-white/5 rounded-full">
-              <p className="text-sm text-emerald-400 font-medium">Bridging Home & School</p>
-              <p className="text-xs text-emerald-400/70">Pagbubuklod ng Bahay at Paaralan</p>
-            </div>
-          </div>
-
-          {/* Login Card */}
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            {/* Card Header */}
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-4">
-              <h2 className="text-lg font-semibold text-white">Welcome Back</h2>
-              <p className="text-slate-400 text-sm">Sign in to continue</p>
-            </div>
-          
-            <div className="p-6 sm:p-8">
-              {/* Role Selection */}
-              <div className="mb-6">
-                <p className="text-xs font-medium text-slate-500 mb-3 uppercase tracking-wide">Select Role</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <button 
-                    onClick={() => setRole('teacher')}
-                    className={cn(
-                      "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-                      role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-100" : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
-                    )}
-                  >
-                    <Award className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Teacher</span>
-                  </button>
-                  <button 
-                    onClick={() => setRole('parent')}
-                    className={cn(
-                      "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-                      role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-100" : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
-                    )}
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="text-sm font-semibold">Parent</span>
-                  </button>
-                </div>
+      <div className="min-h-screen bg-slate-900 flex font-sans">
+        {/* Left Side - Login Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full max-w-md"
+          >
+            {/* Logo */}
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-600 rounded-xl mb-3">
+                <BookOpen className="text-white w-6 h-6" />
               </div>
+              <h1 className="text-2xl font-bold text-white">GabayAral</h1>
+              <p className="text-slate-400 text-sm">Academic Monitoring Portal</p>
+            </div>
 
-              {/* Form Fields */}
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">
-                    {role === 'teacher' ? 'Teacher ID' : 'Access Code'}
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                      <User className="w-4 h-4 text-slate-400" />
-                    </div>
+            {/* Login Card */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 sm:p-8">
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-slate-900">Welcome Back</h2>
+                  <p className="text-sm text-slate-500">Sign in to continue</p>
+                </div>
+
+                {/* Role Selection */}
+                <div className="mb-5">
+                  <p className="text-xs font-medium text-slate-500 mb-2 uppercase tracking-wide">Select Role</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => setRole('teacher')}
+                      className={cn(
+                        "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
+                        role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                      )}
+                    >
+                      <Award className="w-4 h-4" />
+                      <span className="text-sm font-medium">Teacher</span>
+                    </button>
+                    <button 
+                      onClick={() => setRole('parent')}
+                      className={cn(
+                        "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
+                        role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                      )}
+                    >
+                      <User className="w-4 h-4" />
+                      <span className="text-sm font-medium">Parent</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Form */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">
+                      {role === 'teacher' ? 'Teacher ID' : 'Access Code'}
+                    </label>
                     <input 
                       type="text" 
                       placeholder={role === 'teacher' ? "Enter teacher ID" : "Enter parent code"}
-                      className="w-full border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                      className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                     />
                   </div>
-                </div>
-                
-                <div>
-                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">Password</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                      <Settings className="w-4 h-4 text-slate-400" />
-                    </div>
+                  <div>
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">Password</label>
                     <input 
                       type="password" 
                       placeholder="••••••••"
-                      className="w-full border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                      className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Submit Button */}
-              <button 
-                onClick={() => setIsAuthenticated(true)}
-                className="w-full mt-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <span>Sign In</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-             
-              {/* Footer */}
-              <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-center gap-2">
-                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                 <p className="text-xs text-slate-400">AI-Powered Learning Insights</p>
+                <button 
+                  onClick={() => setIsAuthenticated(true)}
+                  className="w-full mt-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all"
+                >
+                  Sign In
+                </button>
+              </div>
+            </div>
+
+            <p className="text-center text-xs text-slate-500 mt-6">
+              Demo Mode: Click any role, then sign in
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Right Side - Hero Image */}
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-emerald-600 to-blue-600 items-center justify-center p-12 relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/10 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
+          
+          {/* Hero Content */}
+          <div className="text-center text-white relative z-10 max-w-md">
+            <div className="w-24 h-24 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+              <BookOpen className="w-12 h-12" />
+            </div>
+            <h2 className="text-3xl font-bold mb-3">Bridging Home & School</h2>
+            <p className="text-emerald-100 mb-6">Pagbubuklod ng Bahay at Paaralan</p>
+            <div className="flex justify-center gap-8 text-sm">
+              <div>
+                <p className="text-2xl font-bold">100%</p>
+                <p className="text-emerald-200">Real-time</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold">AI</p>
+                <p className="text-emerald-200">Powered</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold">24/7</p>
+                <p className="text-emerald-200">Access</p>
               </div>
             </div>
           </div>
-
-          {/* Demo Hint */}
-          <p className="text-center text-xs text-slate-500 mt-6">
-            Demo Mode: Click any role, then sign in (no password needed)
-          </p>
-        </motion.div>
+        </div>
       </div>
     );
   }
