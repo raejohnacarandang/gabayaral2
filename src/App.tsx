@@ -605,31 +605,33 @@ if (!isAuthenticated) {
         </div>
 
         {/* Right Side - Hero Image */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-emerald-600 to-blue-600 items-center justify-center p-12 relative overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full"></div>
-          <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/10 rounded-full"></div>
-          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
+        <div className="hidden lg:flex lg:w-1/2 bg-slate-800 items-center justify-center p-12 relative overflow-hidden">
+          {/* Hero Image */}
+          <img 
+            src="/image.png" 
+            alt="GabayAral Demo" 
+            className="w-full h-full object-cover opacity-90"
+          />
+          
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-slate-900/30"></div>
           
           {/* Hero Content */}
-          <div className="text-center text-white relative z-10 max-w-md">
-            <div className="w-24 h-24 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-              <BookOpen className="w-12 h-12" />
-            </div>
-            <h2 className="text-3xl font-bold mb-3">Bridging Home & School</h2>
-            <p className="text-emerald-100 mb-6">Pagbubuklod ng Bahay at Paaralan</p>
-            <div className="flex justify-center gap-8 text-sm">
+          <div className="absolute bottom-12 left-12 right-12 text-white text-left">
+            <h2 className="text-3xl font-bold mb-2">Bridging Home & School</h2>
+            <p className="text-emerald-300 mb-4">Pagbubuklod ng Bahay at Paaralan</p>
+            <div className="flex gap-6 text-sm">
               <div>
                 <p className="text-2xl font-bold">100%</p>
-                <p className="text-emerald-200">Real-time</p>
+                <p className="text-slate-300">Real-time</p>
               </div>
               <div>
                 <p className="text-2xl font-bold">AI</p>
-                <p className="text-emerald-200">Powered</p>
+                <p className="text-slate-300">Powered</p>
               </div>
               <div>
                 <p className="text-2xl font-bold">24/7</p>
-                <p className="text-emerald-200">Access</p>
+                <p className="text-slate-300">Access</p>
               </div>
             </div>
           </div>
