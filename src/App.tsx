@@ -442,6 +442,22 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
   const [detailedSubjectId, setDetailedSubjectId] = useState<string | null>(null);
   const [successModal, setSuccessModal] = useState<{ show: boolean, message: string }>({ show: false, message: '' });
+  const [showAddStudent, setShowAddStudent] = useState(false);
+  const [newStudentName, setNewStudentName] = useState('');
+
+  const handleAddStudent = () => {
+    if (!newStudentName.trim()) return;
+    const newStudent: Student = {
+      id: `s${MOCK_STUDENTS.length + 1}`,
+      name: newStudentName,
+      parentId: `p${MOCK_STUDENTS.length + 1}`,
+      classId: 'c1'
+    };
+    // This would normally update the database
+    setNewStudentName('');
+    setShowAddStudent(false);
+    setSuccessModal({ show: true, message: 'Student added successfully!' });
+  };
 
   if (!isAuthenticated) {
 return (
@@ -894,6 +910,13 @@ return (
                     </button>
                 </div>
 
+                <button 
+                  onClick={() => setShowAddStudent(true)}
+                  className="w-full flex items-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-all"
+                >
+                  <Users className="w-4 h-4" /> Add Student
+                </button>
+
                 <div className="bg-emerald-600 p-5 rounded-xl text-white">
                     <p className="text-xs text-emerald-200 mb-1">Class Health</p>
                     <h4 className="text-2xl font-bold mb-1">94%</h4>
@@ -1057,6 +1080,58 @@ return (
         message={successModal.message} 
         onClose={() => setSuccessModal({ show: false, message: '' })} 
       />
+
+      {/* Add Student Modal */}
+      <AnimatePresence>
+        {showAddStudent && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowAddStudent(false)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-xl p-6 shadow-xl max-w-sm w-full"
+            >
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5" /> Add New Student
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-slate-600 mb-1">Student Name</label>
+                  <input 
+                    type="text" 
+                    value={newStudentName}
+                    onChange={(e) => setNewStudentName(e.target.value)}
+                    placeholder="Enter full name"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setShowAddStudent(false)}
+                    className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-slate-600 font-medium hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleAddStudent}
+                    disabled={!newStudentName.trim()}
+                    className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium disabled:opacity-50"
+                  >
+                    Add Student
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
