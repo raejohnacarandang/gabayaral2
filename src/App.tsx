@@ -461,82 +461,83 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
 if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden"
         >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-blue-500 to-emerald-500" />
-          
-          <div className="flex flex-col items-center mb-8 text-center p-8 pb-6">
-            <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-              <BookOpen className="text-white w-8 h-8" />
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-8 text-center">
+            <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+              <BookOpen className="text-white w-7 h-7" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 mb-1">GabayAral</h1>
-            <p className="text-sm text-slate-500 font-medium">Academic Monitoring Portal</p>
-            <p className="text-xs text-emerald-600 mt-2 font-medium">Bridging Home & School</p>
+            <h1 className="text-2xl font-bold text-white">GabayAral</h1>
+            <p className="text-emerald-100 text-sm mt-1">Academic Monitoring Portal</p>
           </div>
-
-          <div className="space-y-6">
-            <div>
-              <p className="text-xs font-medium text-slate-600 mb-3 text-center">Select your role</p>
-              <div className="grid grid-cols-2 gap-3">
-                <button 
-                  onClick={() => setRole('teacher')}
-                  className={cn(
-                    "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all",
-                    role === 'teacher' ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-400"
-                  )}
-                >
-                  <Award className="w-6 h-6" />
-                  <span className="text-sm font-semibold">Teacher</span>
-                </button>
-                <button 
-                  onClick={() => setRole('parent')}
-                  className={cn(
-                    "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all",
-                    role === 'parent' ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-400"
-                  )}
-                >
-                  <User className="w-6 h-6" />
-                  <span className="text-sm font-semibold">Parent</span>
-                </button>
-              </div>
+          
+          <div className="p-8">
+            <div className="text-center mb-6">
+              <p className="text-sm font-medium text-slate-600">Sign in to continue</p>
+              <p className="text-xs text-slate-400 mt-1">Demo Mode: No password required</p>
             </div>
 
-            <div className="space-y-3">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                  <User className="w-4 h-4 text-slate-400" />
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-medium text-slate-500 mb-2">Select Role</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <button 
+                    onClick={() => setRole('teacher')}
+                    className={cn(
+                      "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
+                      role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                    )}
+                  >
+                    <Award className="w-4 h-4" />
+                    <span className="text-sm font-medium">Teacher</span>
+                  </button>
+                  <button 
+                    onClick={() => setRole('parent')}
+                    className={cn(
+                      "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
+                      role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                    )}
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="text-sm font-medium">Parent</span>
+                  </button>
                 </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-slate-500 mb-1 block">Access Code</label>
                 <input 
                   type="text" 
-                  placeholder={role === 'teacher' ? "Teacher ID" : "Parent Access Code"}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                  placeholder={role === 'teacher' ? "Teacher ID" : "Parent Code"}
+                  className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                  <Settings className="w-4 h-4 text-slate-400" />
-                </div>
+              
+              <div>
+                <label className="text-xs font-medium text-slate-500 mb-1 block">Password</label>
                 <input 
                   type="password" 
-                  placeholder="Password"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                  placeholder="••••••••"
+                  className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
 
             <button 
               onClick={() => setIsAuthenticated(true)}
-              className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg transition-all"
+              className="w-full mt-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
             >
-              Continue as {role === 'teacher' ? 'Teacher' : 'Parent'}
+              <span>Sign In</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
-            
-            <div className="text-center">
-               <p className="text-xs text-slate-400">Powered by AI Insights</p>
+             
+            <div className="mt-6 text-center flex items-center justify-center gap-2">
+               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+               <p className="text-xs text-slate-400">AI-Powered Learning Insights</p>
             </div>
           </div>
         </motion.div>
@@ -545,42 +546,32 @@ if (!isAuthenticated) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       {/* Top Navbar */}
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center">
-              <BookOpen className="text-white w-5 h-5" />
+            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+              <BookOpen className="text-white w-4 h-4" />
             </div>
-            <div>
-              <span className="text-lg font-bold text-slate-900">GabayAral</span>
-              <p className="text-[10px] text-emerald-600 font-medium">Insightful Learning</p>
-            </div>
+            <span className="text-base font-semibold text-slate-900">GabayAral</span>
           </div>
 
-
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setIsAuthenticated(false)}
-              className="text-sm text-slate-500 hover:text-slate-800 font-medium"
-            >
-              Logout
-            </button>
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="relative">
-              <Bell className="w-5 h-5 text-slate-500" />
+              <Bell className="w-4 h-4 text-slate-500" />
               {alerts.some(a => !a.isRead) && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full"></span>
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
               )}
             </div>
-            <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
+            <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-slate-900">{role === 'teacher' ? 'Prof. Cruz' : 'Elena Santos'}</p>
+                <p className="text-sm font-medium text-slate-900">{role === 'teacher' ? 'Prof. Cruz' : 'Elena Santos'}</p>
                 <p className="text-xs text-slate-500 capitalize">{role}</p>
               </div>
               <button 
                 onClick={() => setIsAuthenticated(false)}
-                className="w-9 h-9 rounded-full bg-slate-100 overflow-hidden"
+                className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden"
               >
                 <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role === 'teacher' ? 'teacher-8' : 'parent-2'}`} alt="Avatar" />
               </button>
@@ -634,22 +625,21 @@ if (!isAuthenticated) {
                 <motion.div 
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  className="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-xl text-white border border-emerald-500/30"
+                  className="bg-slate-900 p-5 rounded-xl text-white"
                 >
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="p-1.5 bg-emerald-500/20 rounded-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
                         <BrainCircuit className="w-4 h-4 text-emerald-400" />
+                        <span className="text-sm font-semibold">AI Learning Analysis</span>
                       </div>
-                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">AI Learning Analysis</span>
-                      <span className="text-xs text-slate-500">• Real-time</span>
+                      <span className="text-xs text-slate-400">Real-time</span>
                     </div>
-                    <h2 className="text-xl font-bold mb-2">Learning Progress Report</h2>
                     {aiAnalysis && (
                       <p className="text-sm text-slate-300 mb-4">
-                        <span className="text-white font-semibold">{currentUserStudent.name.split(' ')[0]}</span> {aiAnalysis.message}
+                        <span className="text-white font-medium">{currentUserStudent.name.split(' ')[0]}</span> {aiAnalysis.message}
                       </p>
                     )}
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-4 gap-2">
                       {aiAnalysis && [
                         { label: 'Overall Avg', value: `${aiAnalysis.retention}%`, color: aiAnalysis.retention >= 80 ? 'text-emerald-400' : 'text-amber-400' },
                         { label: 'Activity', value: aiAnalysis.participation, color: 'text-blue-400' },
