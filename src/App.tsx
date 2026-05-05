@@ -459,23 +459,24 @@ const handleAddGrade = (newGrade: GradeEntry) => {
     setSuccessModal({ show: true, message: 'Student added successfully!' });
   };
 
-  if (!isAuthenticated) {
-return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-lg p-8 overflow-hidden relative"
-      >
-        <div className="absolute top-0 left-0 w-full h-1 bg-emerald-600" />
-        
-        <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-14 h-14 bg-slate-900 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-            <BookOpen className="text-white w-7 h-7" />
+if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6 font-sans">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden relative"
+        >
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-blue-500 to-emerald-500" />
+          
+          <div className="flex flex-col items-center mb-8 text-center p-8 pb-6">
+            <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+              <BookOpen className="text-white w-8 h-8" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 mb-1">GabayAral</h1>
+            <p className="text-sm text-slate-500 font-medium">Academic Monitoring Portal</p>
+            <p className="text-xs text-emerald-600 mt-2 font-medium">Bridging Home & School</p>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">GabayAral</h1>
-          <p className="text-xs text-slate-500 font-medium">Academic Monitoring Portal</p>
-        </div>
 
           <div className="space-y-6">
             <div>
@@ -560,6 +561,12 @@ return (
 
 
           <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsAuthenticated(false)}
+              className="text-sm text-slate-500 hover:text-slate-800 font-medium"
+            >
+              Logout
+            </button>
             <div className="relative">
               <Bell className="w-5 h-5 text-slate-500" />
               {alerts.some(a => !a.isRead) && (
@@ -623,34 +630,35 @@ return (
                   </div>
                 </header>
 
-                {/* AI Summary Card */}
+{/* AI Summary Card */}
                 <motion.div 
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  className="bg-slate-900 p-6 rounded-xl text-white"
+                  className="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-xl text-white border border-emerald-500/30"
                 >
                     <div className="flex items-center gap-2 mb-4">
-                      <BrainCircuit className="w-4 h-4 text-emerald-400" />
-                      <span className="text-xs font-medium text-emerald-400">AI Learning Analysis</span>
+                      <div className="p-1.5 bg-emerald-500/20 rounded-lg">
+                        <BrainCircuit className="w-4 h-4 text-emerald-400" />
+                      </div>
+                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">AI Learning Analysis</span>
+                      <span className="text-xs text-slate-500">• Real-time</span>
                     </div>
-                    <h2 className="text-xl font-bold mb-2">Good morning, Elena.</h2>
+                    <h2 className="text-xl font-bold mb-2">Learning Progress Report</h2>
                     {aiAnalysis && (
-                      <p className="text-sm text-slate-400 mb-4">
-                        Based on this week's progress, <span className="text-white font-semibold">{currentUserStudent.name.split(' ')[0]}</span> {aiAnalysis.message}
-                        {aiAnalysis.trend === 'improving' && ' Recent scores show improvement!'}
-                        {aiAnalysis.trend === 'declining' && ' Recent scores need attention.'}
+                      <p className="text-sm text-slate-300 mb-4">
+                        <span className="text-white font-semibold">{currentUserStudent.name.split(' ')[0]}</span> {aiAnalysis.message}
                       </p>
                     )}
                     <div className="grid grid-cols-4 gap-3">
                       {aiAnalysis && [
-                        { label: 'Retention', value: `${aiAnalysis.retention}%`, color: aiAnalysis.retention >= 80 ? 'text-emerald-400' : 'text-amber-400' },
-                        { label: 'Activity', value: `${aiAnalysis.recentActivity} grades`, color: 'text-blue-400' },
-                        { label: 'Focus', value: `${aiAnalysis.focusScore}/10`, color: aiAnalysis.focusScore >= 8 ? 'text-emerald-400' : 'text-amber-400' },
-                        { label: 'Next', value: aiAnalysis.nextMilestone, color: 'text-slate-100' }
+                        { label: 'Overall Avg', value: `${aiAnalysis.retention}%`, color: aiAnalysis.retention >= 80 ? 'text-emerald-400' : 'text-amber-400' },
+                        { label: 'Activity', value: aiAnalysis.participation, color: 'text-blue-400' },
+                        { label: 'Strongest', value: aiAnalysis.strongest, color: 'text-emerald-400' },
+                        { label: 'Needs Focus', value: aiAnalysis.weakest, color: 'text-rose-400' }
                       ].map((item, i) => (
-                        <div key={i} className="bg-white/5 p-3 rounded-lg">
-                          <p className="text-[10px] text-slate-500 mb-1">{item.label}</p>
-                          <p className={cn("font-bold", item.color)}>{item.value}</p>
+                        <div key={i} className="bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+                          <p className="text-[10px] text-slate-400 mb-1">{item.label}</p>
+                          <p className={cn("font-bold text-sm truncate", item.color)}>{item.value}</p>
                         </div>
                       ))}
                     </div>
@@ -919,8 +927,20 @@ return (
 
                 <div className="bg-emerald-600 p-5 rounded-xl text-white">
                     <p className="text-xs text-emerald-200 mb-1">Class Health</p>
-                    <h4 className="text-2xl font-bold mb-1">94%</h4>
-                    <p className="text-xs text-emerald-200">Participation Rate</p>
+                    <h4 className="text-2xl font-bold mb-1">{MOCK_STUDENTS.length}</h4>
+                    <p className="text-xs text-emerald-200">Active Students</p>
+                </div>
+
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BrainCircuit className="w-4 h-4 text-blue-600" />
+                    <span className="text-xs font-bold text-blue-700 uppercase">AI Features</span>
+                  </div>
+                  <ul className="text-xs text-blue-600 space-y-1">
+                    <li>• Auto-grade analysis</li>
+                    <li>• Insight alerts</li>
+                    <li>• Feedback suggestions</li>
+                  </ul>
                 </div>
               </div>
 
@@ -928,7 +948,10 @@ return (
               <div className="lg:col-span-3 space-y-6">
                 <header className="flex justify-between items-end">
                   <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Grade 8 • St. Jude Section</h1>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h1 className="text-2xl font-bold text-slate-900">Grade 8 • St. Jude Section</h1>
+                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded">DEMO</span>
+                    </div>
                     <p className="text-sm text-slate-500">Performance Encoding & Monitoring</p>
                   </div>
                   <div className="flex gap-2">
