@@ -86,7 +86,7 @@ const StatCard = ({ title, value, icon: Icon, colorClass }: any) => (
 
 // --- Teacher Components ---
 
-const GradeEncoder = ({ students, subjects, selectedStudentId, onAddGrade, onAddFeedback }: { students: Student[], subjects: any[], selectedStudentId?: string, onAddGrade: any, onAddFeedback: any }) => {
+const GradeEncoder = ({ students, subjects, selectedStudentId, grades, onAddGrade, onAddFeedback }: { students: Student[], subjects: any[], selectedStudentId?: string, grades?: GradeEntry[], onAddGrade: any, onAddFeedback: any }) => {
   const sortedStudents = useMemo(() => {
     return [...students].sort((a, b) => {
       const aLastName = a.name.split(' ').slice(-1)[0].toLowerCase();
@@ -109,6 +109,53 @@ const GradeEncoder = ({ students, subjects, selectedStudentId, onAddGrade, onAdd
   const [category, setCategory] = useState<'written' | 'performance' | 'exam'>('written');
   const [customType, setCustomType] = useState('Quiz 1');
   const [feedbackText, setFeedbackText] = useState('');
+
+  // AI Feedback Generator based on actual student data
+  const generateAIFeedback = () => {
+    if (!selectedStudent || !grades) return;
+    
+    const studentGrades = grades.filter(g => g.studentId === selectedStudent);
+    const subjectGrades = studentGrades.filter(g => g.subjectId === selectedSubject);
+    
+    if (subjectGrades.length === 0) {
+      setFeedbackText(`Welcome to GabayAral! This is the first recorded interaction for this student. Looking forward to tracking their progress.`);
+      return;
+    }
+
+    const avg = subjectGrades.reduce((sum, g) => sum + (g.score / g.maxScore) * 100, 0) / subjectGrades.length;
+    const recentGrades = subjectGrades.slice(-3);
+    const latestScore = recentGrades[recentGrades.length - 1]?.score || 0;
+    const latestMax = recentGrades[recentGrades.length - 1]?.maxScore || 100;
+    const latestPercent = (latestScore / latestMax) * 100;
+
+    const student = students.find(s => s.id === selectedStudent);
+    const firstName = student?.name.split(' ')[0] || 'Student';
+    
+    let message = '';
+    
+    if (avg >= 90) {
+      message = `${firstName} has been performing exceptionally well in ${subjects.find(s => s.id === selectedSubject)?.name}. Keep up the excellent work!`;
+    } else if (avg >= 80) {
+      message = `${firstName} is showing strong performance in ${subjects.find(s => s.id === selectedSubject)?.name}. Consistent effort is paying off.`;
+    } else if (avg >= 75) {
+      message = `${firstName} is making steady progress in ${subjects.find(s => s.id === selectedSubject)?.name}. Continued practice will help improve scores.`;
+    } else {
+      message = `${firstName} may need extra support in ${subjects.find(s => s.id === selectedSubject)?.name}. Let's work together on this.`;
+    }
+
+    // Add specific recent performance note
+    if (latestPercent >= 90) {
+      message += ` Recent assessment shows outstanding results (${latestScore}/${latestMax}).`;
+    } else if (latestPercent >= 80) {
+      message += ` Recent performance is solid at ${latestScore}/${latestMax}.`;
+    } else if (latestPercent >= 70) {
+      message += ` Recent score of ${latestScore}/${latestMax} shows room for improvement.`;
+    } else {
+      message += ` Recent score of ${latestScore}/${latestMax} needs attention.`;
+    }
+
+    setFeedbackText(message);
+  };
 
   const QUICK_TEMPLATES = [
     { text: 'Outstanding consistency!', sentiment: 'positive' as const },
@@ -234,19 +281,15 @@ return (
           <MessageSquare className="w-4 h-4" />
           Teacher's Journal
         </h3>
-          <div className="flex items-center justify-between mb-3">
+<div className="flex items-center justify-between mb-3">
              <label className="text-xs text-slate-500">Feedback</label>
              <button 
-                onClick={() => {
-                  const student = students.find(s => s.id === selectedStudent);
-                  const msg = `Based on recent scores, ${student?.name.split(' ')[0]} is showing strong ${category} skills. Overall performance is stable.`;
-                  setFeedbackText(msg);
-                }}
-                className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded text-xs hover:bg-emerald-100 transition-colors"
-              >
-                <Sparkles className="w-3 h-3" /> AI Generate
-             </button>
-         </div>
+               onClick={generateAIFeedback}
+               className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded text-xs hover:bg-emerald-100 transition-colors"
+             >
+               <Sparkles className="w-3 h-3" /> AI Generate
+            </button>
+        </div>
         <textarea 
           className="w-full h-20 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 outline-none resize-none mb-3"
           placeholder="Write a note to parents..."
@@ -1059,6 +1102,7 @@ if (!isAuthenticated) {
                       students={MOCK_STUDENTS} 
                       subjects={MOCK_SUBJECTS}
                       selectedStudentId={selectedStudentId}
+                      grades={grades}
                       onAddGrade={handleAddGrade}
                       onAddFeedback={handleAddFeedback}
                     />
