@@ -43,6 +43,40 @@ const getStatusLabel = (average: number) => {
 
 // --- Sub-components ---
 
+const SuccessModal = ({ show, message, onClose }: { show: boolean, message: string, onClose: () => void }) => (
+  <AnimatePresence>
+    {show && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+      >
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white rounded-3xl p-8 shadow-2xl max-w-sm w-full text-center"
+        >
+          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+          </div>
+          <h3 className="text-xl font-black text-slate-900 mb-2">Success!</h3>
+          <p className="text-sm text-slate-500 font-medium">{message}</p>
+          <button 
+            onClick={onClose}
+            className="mt-6 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all"
+          >
+            Continue
+          </button>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
 const StatCard = ({ title, value, icon: Icon, colorClass }: any) => (
   <div className="bg-white px-6 py-4 rounded-2xl border border-slate-200 shadow-sm transition-all hover:shadow-md flex flex-col items-center">
     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{title}</span>
@@ -296,6 +330,7 @@ export default function App() {
 
   const handleAddGrade = (newGrade: GradeEntry) => {
     setGrades(prev => [...prev, newGrade]);
+    setSuccessModal({ show: true, message: 'Performance record posted successfully!' });
     
     // Intelligent Risk Detection (Light AI Logic)
     const subGrades = grades.filter(g => g.studentId === newGrade.studentId && g.subjectId === newGrade.subjectId);
@@ -329,6 +364,7 @@ export default function App() {
 
   const handleAddFeedback = (newFb: TeacherFeedback) => {
     setFeedback(prev => [newFb, ...prev]);
+    setSuccessModal({ show: true, message: 'Feedback sent to parent successfully!' });
   };
 
   const handleMarkAlertRead = (alertId: string) => {
@@ -340,6 +376,7 @@ export default function App() {
   };
 
   const [detailedSubjectId, setDetailedSubjectId] = useState<string | null>(null);
+  const [successModal, setSuccessModal] = useState<{ show: boolean, message: string }>({ show: false, message: '' });
 
   if (!isAuthenticated) {
     return (
@@ -992,6 +1029,12 @@ export default function App() {
           <button className="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">Contact IT</button>
         </div>
       </footer>
+
+      <SuccessModal 
+        show={successModal.show} 
+        message={successModal.message} 
+        onClose={() => setSuccessModal({ show: false, message: '' })} 
+      />
     </div>
   );
 }
