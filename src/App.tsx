@@ -504,85 +504,108 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
 if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden"
+          className="w-full max-w-md"
         >
-          <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-8 text-center">
-            <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
-              <BookOpen className="text-white w-7 h-7" />
+          {/* Logo Section */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-900 rounded-2xl shadow-xl mb-4">
+              <BookOpen className="text-white w-8 h-8" />
             </div>
-            <h1 className="text-2xl font-bold text-white">GabayAral</h1>
-            <p className="text-emerald-100 text-sm mt-1">Academic Monitoring Portal</p>
+            <h1 className="text-3xl font-bold text-slate-900">GabayAral</h1>
+            <p className="text-slate-500 mt-1">Academic Monitoring Portal</p>
           </div>
-          
-          <div className="p-8">
-            <div className="text-center mb-6">
-              <p className="text-sm font-medium text-slate-600">Sign in to continue</p>
-              <p className="text-xs text-slate-400 mt-1">Demo Mode: No password required</p>
-            </div>
 
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs font-medium text-slate-500 mb-2">Select Role</p>
+          {/* Login Card */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+            <div className="p-6 sm:p-8">
+              <div className="text-center mb-6">
+                <h2 className="text-lg font-semibold text-slate-900">Welcome Back</h2>
+                <p className="text-sm text-slate-500 mt-1">Sign in to access your dashboard</p>
+              </div>
+
+              {/* Role Selection */}
+              <div className="mb-6">
+                <p className="text-xs font-medium text-slate-500 mb-2 uppercase tracking-wide">Select Role</p>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setRole('teacher')}
                     className={cn(
-                      "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
-                      role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                      "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
+                      role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-100" : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
                     )}
                   >
-                    <Award className="w-4 h-4" />
-                    <span className="text-sm font-medium">Teacher</span>
+                    <Award className="w-5 h-5" />
+                    <span className="text-sm font-semibold">Teacher</span>
                   </button>
                   <button 
                     onClick={() => setRole('parent')}
                     className={cn(
-                      "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all",
-                      role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                      "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
+                      role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-100" : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
                     )}
                   >
-                    <User className="w-4 h-4" />
-                    <span className="text-sm font-medium">Parent</span>
+                    <User className="w-5 h-5" />
+                    <span className="text-sm font-semibold">Parent</span>
                   </button>
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Access Code</label>
-                <input 
-                  type="text" 
-                  placeholder={role === 'teacher' ? "Teacher ID" : "Parent Code"}
-                  className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
-                />
+              {/* Form Fields */}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">{role === 'teacher' ? 'Teacher ID' : 'Access Code'}</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                      <User className="w-4 h-4 text-slate-400" />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder={role === 'teacher' ? "Enter teacher ID" : "Enter parent code"}
+                      className="w-full border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-xs font-medium text-slate-600 mb-1.5 block">Password</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                      <Settings className="w-4 h-4 text-slate-400" />
+                    </div>
+                    <input 
+                      type="password" 
+                      placeholder="••••••••"
+                      className="w-full border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                    />
+                  </div>
+                </div>
               </div>
-              
-              <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Password</label>
-                <input 
-                  type="password" 
-                  placeholder="••••••••"
-                  className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
-                />
-              </div>
-            </div>
 
-            <button 
-              onClick={() => setIsAuthenticated(true)}
-              className="w-full mt-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
-            >
-              <span>Sign In</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+              {/* Submit Button */}
+              <button 
+                onClick={() => setIsAuthenticated(true)}
+                className="w-full mt-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 group"
+              >
+                <span>Sign In</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </button>
              
-            <div className="mt-6 text-center flex items-center justify-center gap-2">
-               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-               <p className="text-xs text-slate-400">AI-Powered Learning Insights</p>
+              {/* Footer */}
+              <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-center gap-2">
+                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                 <p className="text-xs text-slate-400">Powered by AI Learning Insights</p>
+              </div>
             </div>
           </div>
+
+          {/* Demo Hint */}
+          <p className="text-center text-xs text-slate-400 mt-6">
+            Demo Mode: Click any role, then sign in (no password needed)
+          </p>
         </motion.div>
       </div>
     );
