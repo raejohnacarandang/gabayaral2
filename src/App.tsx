@@ -515,41 +515,41 @@ const handleAddGrade = (newGrade: GradeEntry) => {
 
 if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-900 flex font-sans">
+      <div className="min-h-screen bg-slate-900 flex font-sans overflow-hidden">
         {/* Left Side - Login Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
+        <div className="w-full lg:w-5/12 flex items-center justify-center p-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-sm"
           >
             {/* Logo */}
-            <div className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
                   <BookOpen className="w-5 h-5 text-white" />
                 </div>
-                <h1 className="text-2xl font-bold text-white">GabayAral</h1>
+                <h1 className="text-xl font-bold text-white">GabayAral</h1>
               </div>
               <p className="text-slate-400 text-sm">Academic Monitoring Portal</p>
             </div>
 
             {/* Login Card */}
             <div className="bg-white rounded-xl shadow-lg">
-              <div className="p-8">
-                <div className="mb-6">
-                  <h2 className="text-xl font-semibold text-slate-900">Welcome Back</h2>
-                  <p className="text-slate-500 text-sm mt-1">Sign in to continue</p>
+              <div className="p-6">
+                <div className="mb-5">
+                  <h2 className="text-lg font-semibold text-slate-900">Welcome Back</h2>
+                  <p className="text-slate-500 text-sm mt-0.5">Sign in to continue</p>
                 </div>
 
                 {/* Role Selection */}
-                <div className="mb-5">
+                <div className="mb-4">
                   <p className="text-xs font-medium text-slate-500 mb-2 uppercase tracking-wide">Select Role</p>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <button 
                       onClick={() => setRole('teacher')}
                       className={cn(
-                        "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all font-medium text-sm",
+                        "flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 transition-all font-medium text-sm",
                         role === 'teacher' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-600 hover:border-slate-300"
                       )}
                     >
@@ -559,7 +559,7 @@ if (!isAuthenticated) {
                     <button 
                       onClick={() => setRole('parent')}
                       className={cn(
-                        "flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all font-medium text-sm",
+                        "flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 transition-all font-medium text-sm",
                         role === 'parent' ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-600 hover:border-slate-300"
                       )}
                     >
@@ -570,79 +570,74 @@ if (!isAuthenticated) {
                 </div>
 
                 {/* Form */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <label className="text-xs font-medium text-slate-600 mb-1.5 block">
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">
                       {role === 'teacher' ? 'Teacher ID' : 'Access Code'}
                     </label>
                     <input 
                       type="text" 
                       placeholder={role === 'teacher' ? "Enter teacher ID" : "Enter parent code"}
-                      className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                      className="w-full border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-slate-600 mb-1.5 block">Password</label>
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">Password</label>
                     <input 
                       type="password" 
                       placeholder="••••••••"
-                      className="w-full border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                      className="w-full border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                     />
                   </div>
                 </div>
 
                 <button 
                   onClick={() => setIsAuthenticated(true)}
-                  className="w-full mt-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all"
+                  className="w-full mt-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-all text-sm"
                 >
                   Sign In
                 </button>
               </div>
             </div>
 
-            <p className="text-center text-xs text-slate-500 mt-6">
+            <p className="text-center text-xs text-slate-500 mt-5">
               Demo Mode: Click any role, then sign in
             </p>
           </motion.div>
         </div>
 
         {/* Right Side - Hero Image */}
-        <div className="hidden lg:flex lg:w-1/2 bg-slate-900 relative overflow-hidden">
-          {/* Hero Image - Cover Fit */}
+        <div className="hidden lg:flex lg:w-7/12 bg-slate-900 relative overflow-hidden">
           <img 
             src="/image.png" 
             alt="GabayAral Demo" 
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent"></div>
           
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-          
-          {/* Brand Badge */}
-          <div className="absolute top-6 left-6">
-            <div className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
-              <BookOpen className="w-5 h-5 text-white" />
-              <span className="text-white font-semibold">GabayAral</span>
+          <div className="absolute top-5 left-5">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg">
+              <BookOpen className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-semibold">GabayAral</span>
             </div>
           </div>
           
-          {/* Hero Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-slate-900 to-transparent">
-            <h2 className="text-3xl font-bold text-white mb-2">Bridging Home & School</h2>
-            <p className="text-emerald-400 font-medium mb-6">Pagbubuklod ng Bahay at Paaralan</p>
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900 to-transparent">
+            <h2 className="text-2xl font-bold text-white mb-1">Bridging Home & School</h2>
+            <p className="text-emerald-400 text-sm font-medium mb-4">Pagbubuklod ng Bahay at Paaralan</p>
             
-            <div className="flex gap-8">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">100%</p>
-                <p className="text-sm text-slate-400">Real-time Tracking</p>
+            <div className="flex gap-6">
+              <div>
+                <p className="text-xl font-bold text-white">100%</p>
+                <p className="text-xs text-slate-400">Real-time</p>
               </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">AI</p>
-                <p className="text-sm text-slate-400">Insights</p>
+              <div>
+                <p className="text-xl font-bold text-white">AI</p>
+                <p className="text-xs text-slate-400">Insights</p>
               </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-sm text-slate-400">Access</p>
+              <div>
+                <p className="text-xl font-bold text-white">24/7</p>
+                <p className="text-xs text-slate-400">Access</p>
               </div>
             </div>
           </div>
