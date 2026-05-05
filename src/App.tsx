@@ -111,20 +111,44 @@ const GradeEncoder = ({ students, subjects, selectedStudentId, grades, onAddGrad
   const [feedbackText, setFeedbackText] = useState('');
   const [customDate, setCustomDate] = useState(new Date().toISOString().split('T')[0]);
 
-  // AI Feedback Generator based on actual student data
+  // AI Feedback Generator based on OVERALL student progress
   const generateAIFeedback = () => {
     if (!selectedStudent || !grades) return;
     
     const studentGrades = grades.filter(g => g.studentId === selectedStudent);
-    const subjectGrades = studentGrades.filter(g => g.subjectId === selectedSubject);
     
-    if (subjectGrades.length === 0) {
+    if (studentGrades.length === 0) {
       setFeedbackText(`Welcome to GabayAral! This is the first recorded interaction for this student. Looking forward to tracking their progress.`);
       return;
     }
 
-    const avg = subjectGrades.reduce((sum, g) => sum + (g.score / g.maxScore) * 100, 0) / subjectGrades.length;
-    const recentGrades = subjectGrades.slice(-3);
+    // Calculate OVERALL average across ALL subjects
+    const avg = studentGrades.reduce((sum, g) => sum + (g.score / g.maxScore) * 100, 0) / studentGrades.length;
+    
+    // Find strongest and weakest subjects
+    const subjectAvgs: Record<string, number> = {};
+    studentGrades.forEach(g => {
+      if (!subjectAvgs[g.subjectId]) subjectAvgs[g.subjectId] = 0;
+      subjectAvgs[g.subjectId] += (g.score / g.maxScore) * 100;
+    });
+    
+    let subjectCount: Record<string, number> = {};
+    studentGrades.forEach(g => {
+      subjectCount[g.subjectId] = (subjectCount[g.subjectId] || 0) + 1;
+    });
+    
+    Object.keys(subjectAvgs).forEach(sid => {
+      subjectAvgs[sid] = subjectAvgs[sid] / (subjectCount[sid] || 1);
+    });
+    
+    const sortedSubjects = Object.entries(subjectAvgs).sort((a, b) => b[1] - a[1]);
+    const strongest = subjects.find(s => s.id === sortedSubjects[0]?.[0])?.name || 'all subjects';
+    const weakest = subjects.find(s => s.id === sortedSubjects[sortedSubjects.length - 1]?.[0])?.name || 'all subjects';
+    const strongestAvg = sortedSubjects[0]?.[1] || 0;
+    const weakestAvg = sortedSubjects[sortedSubjects.length - 1]?.[1] || 0;
+
+    // Get recent trend (last 3 grades)
+    const recentGrades = studentGrades.slice(-3);
     const latestScore = recentGrades[recentGrades.length - 1]?.score || 0;
     const latestMax = recentGrades[recentGrades.length - 1]?.maxScore || 100;
     const latestPercent = (latestScore / latestMax) * 100;
@@ -134,25 +158,31 @@ const GradeEncoder = ({ students, subjects, selectedStudentId, grades, onAddGrad
     
     let message = '';
     
+    // Overall performance message
     if (avg >= 90) {
-      message = `${firstName} has been performing exceptionally well in ${subjects.find(s => s.id === selectedSubject)?.name}. Keep up the excellent work!`;
+      message = `${firstName} is performing exceptionally well overall with ${Math.round(avg)}% average across all subjects!`;
     } else if (avg >= 80) {
-      message = `${firstName} is showing strong performance in ${subjects.find(s => s.id === selectedSubject)?.name}. Consistent effort is paying off.`;
+      message = `${firstName} has a solid ${Math.round(avg)}% average overall. Strongest in ${strongest} (${Math.round(strongestAvg)}%).`;
     } else if (avg >= 75) {
-      message = `${firstName} is making steady progress in ${subjects.find(s => s.id === selectedSubject)?.name}. Continued practice will help improve scores.`;
+      message = `${firstName} is making steady progress with ${Math.round(avg)}% overall. Focus on ${weakest} to improve.`;
     } else {
-      message = `${firstName} may need extra support in ${subjects.find(s => s.id === selectedSubject)?.name}. Let's work together on this.`;
+      message = `${firstName} needs additional support. Overall average is ${Math.round(avg)}%.`;
     }
 
-    // Add specific recent performance note
-    if (latestPercent >= 90) {
-      message += ` Recent assessment shows outstanding results (${latestScore}/${latestMax}).`;
-    } else if (latestPercent >= 80) {
-      message += ` Recent performance is solid at ${latestScore}/${latestMax}.`;
-    } else if (latestPercent >= 70) {
-      message += ` Recent score of ${latestScore}/${latestMax} shows room for improvement.`;
-    } else {
-      message += ` Recent score of ${latestScore}/${latestMax} needs attention.`;
+    // Add subject-specific insights
+    if (strongestAvg - weakestAvg >= 15) {
+      message += ` Shows ${Math.round(strongestAvg - weakestAvg)}% gap between ${strongest} and ${weakest}.`;
+    }
+
+    // Recent trend note
+    if (recentGrades.length >= 2) {
+      const older = recentGrades[recentGrades.length - 2]?.score / recentGrades[recentGrades.length - 2]?.maxScore * 100;
+      const newer = latestPercent;
+      if (newer > older + 5) {
+        message += ` Recent trend shows improvement!`;
+      } else if (newer < older - 5) {
+        message += ` Recent scores need attention.`;
+      }
     }
 
     setFeedbackText(message);
