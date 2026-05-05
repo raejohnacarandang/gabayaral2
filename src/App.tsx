@@ -109,6 +109,7 @@ const GradeEncoder = ({ students, subjects, selectedStudentId, grades, onAddGrad
   const [category, setCategory] = useState<'written' | 'performance' | 'exam'>('written');
   const [customType, setCustomType] = useState('Quiz 1');
   const [feedbackText, setFeedbackText] = useState('');
+  const [customDate, setCustomDate] = useState(new Date().toISOString().split('T')[0]);
 
   // AI Feedback Generator based on actual student data
   const generateAIFeedback = () => {
@@ -254,6 +255,16 @@ return (
             </select>
           </div>
 
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">Date</label>
+            <input 
+              type="date" 
+              value={customDate}
+              onChange={(e) => setCustomDate(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 outline-none"
+            />
+          </div>
+
           <button 
             onClick={() => {
               if (!score) return;
@@ -265,7 +276,7 @@ return (
                 maxScore: Number(maxScore),
                 category,
                 type: customType,
-                date: new Date().toISOString().split('T')[0]
+                date: customDate
               });
               setScore('');
             }}
