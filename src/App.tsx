@@ -333,15 +333,14 @@ export default function App() {
     return { totalAvg, growth };
   }, [studentAverages]);
 
-  const handleAddGrade = (newGrade: GradeEntry) => {
-    setGrades(prev => [...prev, newGrade]);
-    setSuccessModal({ show: true, message: 'Performance record posted successfully!' });
-    
-    // Intelligent Risk Detection (Light AI Logic)
-    const subGrades = grades.filter(g => g.studentId === newGrade.studentId && g.subjectId === newGrade.subjectId);
-    if (subGrades.length > 0) {
-      const prevAvg = calculateAverage(subGrades);
+const handleAddGrade = (newGrade: GradeEntry) => {
+    // Intelligent Risk Detection (Light AI Logic) - check BEFORE adding
+    const prevGrades = grades.filter(g => g.studentId === newGrade.studentId && g.subjectId === newGrade.subjectId);
+    if (prevGrades.length > 0) {
+      const prevAvg = calculateAverage(prevGrades);
       const newScorePercent = (newGrade.score / newGrade.maxScore) * 100;
+      
+      console.log('Checking insight:', { prevGrades: prevGrades.length, prevAvg, newScorePercent, diff: newScorePercent - prevAvg });
       
       if (newScorePercent < prevAvg - 10) {
         setAlerts(prev => [{
@@ -358,13 +357,16 @@ export default function App() {
           id: Date.now().toString(),
           studentId: newGrade.studentId,
           title: 'Celebration Moment',
-          message: `Exceptional progress recorded in ${MOCK_SUBJECTS.find(s => s.id === newGrade.subjectId)?.name}! High engagement detected in ${newGrade.type}.`,
+          message: `Exceptional progress recorded in ${MOCK_SUBJECTS.find(s => s.id === newGrade.subjectId)!}! High engagement detected in ${newGrade.type}.`,
           type: 'improvement',
           date: new Date().toISOString().split('T')[0],
           isRead: false
         }, ...prev]);
       }
     }
+    
+    setGrades(prev => [...prev, newGrade]);
+    setSuccessModal({ show: true, message: 'Performance record posted successfully!' });
   };
 
   const handleAddFeedback = (newFb: TeacherFeedback) => {

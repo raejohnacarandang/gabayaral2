@@ -30,6 +30,14 @@ export const MOCK_GRADES: GradeEntry[] = [
   { id: 'g5', subjectId: 'sub2', studentId: 's1', category: 'written', type: 'Quiz 1', score: 92, maxScore: 100, date: '2026-04-12' },
   { id: 'g6', subjectId: 'sub2', studentId: 's1', category: 'performance', type: 'Lab Report 1', score: 95, maxScore: 100, date: '2026-04-18' },
   { id: 'g7', subjectId: 'sub2', studentId: 's1', category: 'performance', type: 'Project Solar', score: 98, maxScore: 100, date: '2026-04-24' },
+
+  // Filipino
+  { id: 'g9', subjectId: 'sub4', studentId: 's1', category: 'written', type: 'Pagsusulit 1', score: 88, maxScore: 100, date: '2026-04-15' },
+  { id: 'g10', subjectId: 'sub4', studentId: 's1', category: 'written', type: 'Salita', score: 75, maxScore: 100, date: '2026-04-22' },
+  
+  // English
+  { id: 'g11', subjectId: 'sub3', studentId: 's1', category: 'written', type: 'Quiz 1', score: 82, maxScore: 100, date: '2026-04-11' },
+  { id: 'g12', subjectId: 'sub3', studentId: 's1', category: 'written', type: 'Essay', score: 90, maxScore: 100, date: '2026-04-19' },
 ];
 
 export const MOCK_FEEDBACK: TeacherFeedback[] = [
